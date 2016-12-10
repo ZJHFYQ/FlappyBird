@@ -14,6 +14,7 @@ public class world extends JPanel{
 	private int width;
 	private BufferedImage background;
 	private BufferedImage startImage;
+	private ground gro;
 	
 	public world(){	
 		try {
@@ -21,6 +22,8 @@ public class world extends JPanel{
 			height=background.getHeight();
 			width=background.getWidth();
 			startImage=ImageIO.read(this.getClass().getResource("start.png"));
+			gro=new ground(400);
+			
 		} catch (IOException e) {
 		}
 	}
@@ -35,20 +38,22 @@ public class world extends JPanel{
 	public void paint(Graphics g) {
 		g.drawImage(background, 0, 0, null);
 		g.drawImage(startImage, 0, 0,null);
+		gro.paint(g);//绘制滚动条
 	}
 	
 	
-	public static void main(String[] args) {
-		JFrame frame=new JFrame("FlappyBird");
-		world w=new world();
-		System.out.println(w.toString());
-		frame.add(w);
-		frame.setSize(w.width, w.height);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//关闭虚拟机
-		frame.setLocationRelativeTo(null);//居中显示
-		frame.setResizable(false);
-		frame.setVisible(true);
+	public void action(){
+		while(true)
+		{
+			try {
+				gro.step(this.width);
+				repaint();
+				Thread.currentThread().sleep(1000/60);
+			} catch (InterruptedException e) {
+			}
+		}
 	}
+	
 }
 
 
